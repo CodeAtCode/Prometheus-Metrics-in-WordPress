@@ -10,7 +10,7 @@ The url: http://domain.tld/wp-json/metrics?prometheus=i8w374sdkfjg
 
 ## URL parameters
 
-###` Output
+### Output
 
 `users=yes` enable:
 ```
