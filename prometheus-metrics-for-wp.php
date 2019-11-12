@@ -70,14 +70,14 @@ function prometheus_get_metrics() {
 		$result .= 'wp_posts_without_title{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'posts_without_content', FILTER_SANITIZE_STRING )  === 'yes' ) {
+	if ( filter_input( INPUT_GET, 'posts_without_content', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_content='' AND post_status!='draft' AND post_status!='trash' AND post_status!='auto-draft' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_posts_without_content Post/Page without content.\n";
 		$result .= "# TYPE wp_posts_without_content counter\n";
 		$result .= 'wp_posts_without_content{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'db_size', FILTER_SANITIZE_STRING )  === 'yes' ) {
+	if ( filter_input( INPUT_GET, 'db_size', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( "SELECT SUM(ROUND(((data_length + index_length) / 1024 / 1024), 2)) as value FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_db_size Total DB size in MB.\n";
 		$result .= "# TYPE wp_db_size counter\n";
@@ -94,14 +94,14 @@ function prometheus_empty_func() {
 
 function prometheus_serve_request( $served, $result, $request, $server ) {
 	if ( !defined( 'PROMETHEUS_KEY' ) && $request->get_route() === '/metrics' ) {
-		echo prometheus_empty_func();.EscapeOutput.OutputNotEscaped
+		echo prometheus_empty_func(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$served = true;
 	}
 
 	if ( isset( $_GET[ 'prometheus' ] ) && esc_html( $_GET[ 'prometheus' ] ) === PROMETHEUS_KEY ) {
 		header( 'Content-Type: text/plain; charset=' . get_option( 'blog_charset' ) );
 		$metrics = prometheus_get_metrics();
-		echo $metrics;.EscapeOutput.OutputNotEscaped
+		echo $metrics; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$served = true;
 	}
 
