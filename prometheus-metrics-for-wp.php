@@ -12,10 +12,12 @@ add_action( 'rest_api_init', 'prometheus_register_route' );
 
 function prometheus_get_metrics() {
 	global $wpdb, $table_prefix;
+	
+	$result = '';
 
 	if ( filter_input( INPUT_GET, 'users', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$users   = count_users();
-		$result  = "# HELP wp_users_total Total number of users.\n";
+		$result .= "# HELP wp_users_total Total number of users.\n";
 		$result .= "# TYPE wp_users_total counter\n";
 		$result .= 'wp_users_total{host="' . get_site_url() . '"} ' . $users[ 'total_users' ] . "\n";
 	}
@@ -84,7 +86,13 @@ function prometheus_get_metrics() {
 		$result .= 'wp_db_size{host="' . get_site_url() . '"} ' . $query[ 0 ][ 'value' ] . "\n";
 	}
 
-	$result .= do_action( 'prometheus_custom_metrics' );
+	/**
+	 * Filter database metrics result
+	 * 
+	 * @var string $result The database metrics result
+	 */
+	$result .= apply_filters( 'prometheus_custom_metrics', $result );
+	
 	return $result;
 }
 
