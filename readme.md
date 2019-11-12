@@ -7,9 +7,30 @@ It is based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/Co
 
 In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
 
-`define( 'PROMETHEUS_KEY', 'i8w374sdkfjg' );`
+`define( 'PROMETHEUS_KEY', 'fg98dfgkj' );`
 
-##
+## Prometheus
+
+To add a new target:
+```
+  - job_name: "WordPress metrics"
+    static_configs:
+      - targets: ["domain.tld"]
+    scrape_interval: "5m"
+    metrics_path: "/wp-json/metrics"
+    params:
+      prometheus: ['fg98dfgkj']
+      users: ['yes']
+      posts: ['yes']
+      pages: ['yes']
+      autoload: ['yes']
+      transient: ['yes']
+      user_sessions: ['yes']
+      posts_without_content: ['yes']
+      posts_without_title: ['yes']
+      db_size: ['yes']
+    scheme: "https"
+```
 
 ### WordPress customization
 
