@@ -91,7 +91,7 @@ function prometheus_get_metrics() {
 	 * 
 	 * @var string $result The database metrics result
 	 */
-	$result .= apply_filters( 'prometheus_custom_metrics', $result );
+	$result = apply_filters( 'prometheus_custom_metrics', $result );
 	
 	return $result;
 }
