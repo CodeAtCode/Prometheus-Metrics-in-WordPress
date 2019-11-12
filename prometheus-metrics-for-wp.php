@@ -84,8 +84,9 @@ function prometheus_get_metrics() {
 		$result .= 'wp_db_size{host="' . get_site_url() . '"} ' . $query[ 0 ][ 'value' ] . "\n";
 	}
 
+	$result .= do_action( 'prometheus_custom_metrics' );
 	return $result;
-	}
+}
 
 function prometheus_empty_func() {
 	return '{ "error": "You cannot access to that page" }';

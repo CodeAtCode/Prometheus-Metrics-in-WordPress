@@ -1,13 +1,19 @@
 # Prometheus Metrics in WordPress
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)   
 
+It is based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
+
 ## Settings  
 
 In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
 
 `define( 'PROMETHEUS_KEY', 'i8w374sdkfjg' );`
 
-The url: http://domain.tld/wp-json/metrics?prometheus=i8w374sdkfjg
+##
+
+### WordPress customization
+
+This plugin include an hook to append new metrics: `prometheus_custom_metrics`
 
 ## URL parameters
 
