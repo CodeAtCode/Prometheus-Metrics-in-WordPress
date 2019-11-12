@@ -5,6 +5,8 @@ It is based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/Co
 
 Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178).
 
+![](https://grafana.com/api/dashboards/11178/images/7117/image)
+
 ## Settings  
 
 In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
