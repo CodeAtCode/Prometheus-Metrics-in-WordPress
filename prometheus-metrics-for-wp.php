@@ -66,7 +66,7 @@ function prometheus_get_metrics() {
 	}
 
 	if ( filter_input( INPUT_GET, 'posts_without_title', FILTER_SANITIZE_STRING ) === 'yes' ) {
-		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_title='' AND post_status!='auto-draft' AND post_status!=\'draft\' AND post_status!=\'trash\' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
+		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_title='' AND post_status!='auto-draft' AND post_status!='draft' AND post_status!='trash' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_posts_without_title Post/Page without title.\n";
 		$result .= "# TYPE wp_posts_without_title counter\n";
 		$result .= 'wp_posts_without_title{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
