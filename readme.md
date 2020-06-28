@@ -1,7 +1,7 @@
 # Prometheus Metrics in WordPress
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)   
 
-It is based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
+A WordPress plugin, based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
 
 Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178).
 
