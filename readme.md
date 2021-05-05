@@ -33,6 +33,7 @@ To add a new target:
       posts_without_content: ['yes']
       posts_without_title: ['yes']
       db_size: ['yes']
+      pending_updates: ['yes']
     scheme: "https"
 ```
 
@@ -110,4 +111,11 @@ wp_posts_without_content{host="https://domain.tld"} 15
 # HELP wp_db_size Total DB size in MB.
 # TYPE wp_db_size counter
 wp_db_size{host="https://domain.tld"} 580.35
+```
+
+`pending_updates=yes` enable:
+```
+# HELP wp_pending_updates Pending updates in the WordPress website.
+# TYPE wp_pending_updates counter
+wp_pending_updates{host="https://domain.tld"} 1
 ```
