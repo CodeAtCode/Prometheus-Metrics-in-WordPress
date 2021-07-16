@@ -19,7 +19,7 @@ function prometheus_get_metrics() {
 	if ( $measure_all || filter_input( INPUT_GET, 'users', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$users   = count_users();
 		$result .= "# HELP wp_users_total Total number of users.\n";
-		$result .= "# TYPE wp_users_total counter\n";
+		$result .= "# TYPE wp_users_total gauge\n";
 		$result .= 'wp_users_total{host="' . get_site_url() . '"} ' . $users[ 'total_users' ] . "\n";
 	}
 
@@ -28,7 +28,7 @@ function prometheus_get_metrics() {
 		$n_posts_pub = $posts->publish;
 		$n_posts_dra = $posts->draft;
 		$result .= "# HELP wp_posts_total Total number of posts published.\n";
-		$result .= "# TYPE wp_posts_total counter\n";
+		$result .= "# TYPE wp_posts_total gauge\n";
 		$result .= 'wp_posts_total{host="' . get_site_url() . '", status="published"} ' . $n_posts_pub . "\n";
 		$result .= 'wp_posts_total{host="' . get_site_url() . '", status="draft"} ' . $n_posts_dra . "\n";
 	}
@@ -36,7 +36,7 @@ function prometheus_get_metrics() {
 	if ( $measure_all || filter_input( INPUT_GET, 'pages', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$n_pages = wp_count_posts( 'page' );
 		$result .= "# HELP wp_pages_total Total number of pages published.\n";
-		$result .= "# TYPE wp_pages_total counter\n";
+		$result .= "# TYPE wp_pages_total gauge\n";
 		$result .= 'wp_pages_total{host="' . get_site_url() . '", status="published"} ' . $n_pages->publish . "\n";
 		$result .= 'wp_pages_total{host="' . get_site_url() . '", status="draft"} ' . $n_pages->draft . "\n";
 	}
@@ -44,53 +44,53 @@ function prometheus_get_metrics() {
 	if ( $measure_all || filter_input( INPUT_GET, 'autoload', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "options` WHERE `autoload` = 'yes'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_options_autoload Options in autoload.\n";
-		$result .= "# TYPE wp_options_autoload counter\n";
+		$result .= "# TYPE wp_options_autoload gauge\n";
 		$result .= 'wp_options_autoload{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 		$query   = $wpdb->get_results( 'SELECT ROUND(SUM(LENGTH(option_value))/ 1024) as value FROM `' . $table_prefix . "options` WHERE `autoload` = 'yes'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_options_autoload_size Options size in KB in autoload.\n";
-		$result .= "# TYPE wp_options_autoload_size counter\n";
+		$result .= "# TYPE wp_options_autoload_size gauge\n";
 		$result .= 'wp_options_autoload_size{host="' . get_site_url() . '"} ' . $query[ 0 ][ 'value' ] . "\n";
 	}
 
 	if ( $measure_all ||  filter_input( INPUT_GET, 'transient', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "options` WHERE `autoload` = 'yes' AND `option_name` LIKE '%transient%'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_transient_autoload DB Transient in autoload.\n";
-		$result .= "# TYPE wp_transient_autoload counter\n";
+		$result .= "# TYPE wp_transient_autoload gauge\n";
 		$result .= 'wp_transient_autoload{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
 	if ( $measure_all || filter_input( INPUT_GET, 'user_sessions', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "options` WHERE `option_name` LIKE '_wp_session_%'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_user_sessions User sessions.\n";
-		$result .= "# TYPE wp_user_sessions counter\n";
+		$result .= "# TYPE wp_user_sessions gauge\n";
 		$result .= 'wp_user_sessions{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
 	if ( $measure_all || filter_input( INPUT_GET, 'posts_without_title', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_title='' AND post_status!='auto-draft' AND post_status!='draft' AND post_status!='trash' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_posts_without_title Post/Page without title.\n";
-		$result .= "# TYPE wp_posts_without_title counter\n";
+		$result .= "# TYPE wp_posts_without_title gauge\n";
 		$result .= 'wp_posts_without_title{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
 	if ( $measure_all || filter_input( INPUT_GET, 'posts_without_content', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_content='' AND post_status!='draft' AND post_status!='trash' AND post_status!='auto-draft' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_posts_without_content Post/Page without content.\n";
-		$result .= "# TYPE wp_posts_without_content counter\n";
+		$result .= "# TYPE wp_posts_without_content gauge\n";
 		$result .= 'wp_posts_without_content{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
 	if ( $measure_all || filter_input( INPUT_GET, 'db_size', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( "SELECT SUM(ROUND(((data_length + index_length) / 1024 / 1024), 2)) as value FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_db_size Total DB size in MB.\n";
-		$result .= "# TYPE wp_db_size counter\n";
+		$result .= "# TYPE wp_db_size gauge\n";
 		$result .= 'wp_db_size{host="' . get_site_url() . '"} ' . $query[ 0 ][ 'value' ] . "\n";
 	}
 
 	if ( $measure_all || filter_input( INPUT_GET, 'pending_updates', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$status = get_site_transient('update_plugins');
 		$result .= "# HELP wp_pending_updates Pending updates in the WordPress website.\n";
-		$result .= "# TYPE wp_pending_updates counter\n";
+		$result .= "# TYPE wp_pending_updates gauge\n";
 		$result .= 'wp_pending_updates{host="' . get_site_url() . '"} ' . (count($status->response) + count($status->translations)) . "\n";
 	}
 
