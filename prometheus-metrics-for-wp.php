@@ -13,16 +13,17 @@ add_action( 'rest_api_init', 'prometheus_register_route' );
 function prometheus_get_metrics() {
 	global $wpdb, $table_prefix;
 
+	$measure_all = filter_input( INPUT_GET, 'all', FILTER_SANITIZE_STRING ) === 'yes';
 	$result = '';
 
-	if ( filter_input( INPUT_GET, 'users', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'users', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$users   = count_users();
 		$result .= "# HELP wp_users_total Total number of users.\n";
 		$result .= "# TYPE wp_users_total counter\n";
 		$result .= 'wp_users_total{host="' . get_site_url() . '"} ' . $users[ 'total_users' ] . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'posts', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'posts', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$posts       = wp_count_posts();
 		$n_posts_pub = $posts->publish;
 		$n_posts_dra = $posts->draft;
@@ -32,7 +33,7 @@ function prometheus_get_metrics() {
 		$result .= 'wp_posts_total{host="' . get_site_url() . '", status="draft"} ' . $n_posts_dra . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'pages', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'pages', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$n_pages = wp_count_posts( 'page' );
 		$result .= "# HELP wp_pages_total Total number of pages published.\n";
 		$result .= "# TYPE wp_pages_total counter\n";
@@ -40,7 +41,7 @@ function prometheus_get_metrics() {
 		$result .= 'wp_pages_total{host="' . get_site_url() . '", status="draft"} ' . $n_pages->draft . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'autoload', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'autoload', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "options` WHERE `autoload` = 'yes'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_options_autoload Options in autoload.\n";
 		$result .= "# TYPE wp_options_autoload counter\n";
@@ -51,42 +52,42 @@ function prometheus_get_metrics() {
 		$result .= 'wp_options_autoload_size{host="' . get_site_url() . '"} ' . $query[ 0 ][ 'value' ] . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'transient', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all ||  filter_input( INPUT_GET, 'transient', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "options` WHERE `autoload` = 'yes' AND `option_name` LIKE '%transient%'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_transient_autoload DB Transient in autoload.\n";
 		$result .= "# TYPE wp_transient_autoload counter\n";
 		$result .= 'wp_transient_autoload{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'user_sessions', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'user_sessions', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "options` WHERE `option_name` LIKE '_wp_session_%'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_user_sessions User sessions.\n";
 		$result .= "# TYPE wp_user_sessions counter\n";
 		$result .= 'wp_user_sessions{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'posts_without_title', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'posts_without_title', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_title='' AND post_status!='auto-draft' AND post_status!='draft' AND post_status!='trash' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_posts_without_title Post/Page without title.\n";
 		$result .= "# TYPE wp_posts_without_title counter\n";
 		$result .= 'wp_posts_without_title{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'posts_without_content', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'posts_without_content', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( 'SELECT * FROM `' . $table_prefix . "posts` WHERE post_content='' AND post_status!='draft' AND post_status!='trash' AND post_status!='auto-draft' AND (post_type='post' OR post_type='page')", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_posts_without_content Post/Page without content.\n";
 		$result .= "# TYPE wp_posts_without_content counter\n";
 		$result .= 'wp_posts_without_content{host="' . get_site_url() . '"} ' . count( $query ) . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'db_size', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'db_size', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$query   = $wpdb->get_results( "SELECT SUM(ROUND(((data_length + index_length) / 1024 / 1024), 2)) as value FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'", ARRAY_A ); // phpcs:ignore WordPress.DB
 		$result .= "# HELP wp_db_size Total DB size in MB.\n";
 		$result .= "# TYPE wp_db_size counter\n";
 		$result .= 'wp_db_size{host="' . get_site_url() . '"} ' . $query[ 0 ][ 'value' ] . "\n";
 	}
 
-	if ( filter_input( INPUT_GET, 'pending_updates', FILTER_SANITIZE_STRING ) === 'yes' ) {
+	if ( $measure_all || filter_input( INPUT_GET, 'pending_updates', FILTER_SANITIZE_STRING ) === 'yes' ) {
 		$status = get_site_transient('update_plugins');
 		$result .= "# HELP wp_pending_updates Pending updates in the WordPress website.\n";
 		$result .= "# TYPE wp_pending_updates counter\n";
@@ -97,8 +98,9 @@ function prometheus_get_metrics() {
 	 * Filter database metrics result
 	 *
 	 * @var string $result The database metrics result
+     * @var boolean $measure_all True, if the "all" parameter is send
 	 */
-	$result = apply_filters( 'prometheus_custom_metrics', $result );
+	$result = apply_filters( 'prometheus_custom_metrics', $result, $measure_all );
 
 	return $result;
 }
