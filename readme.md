@@ -43,6 +43,10 @@ This plugin include an hook to append new metrics: `prometheus_custom_metrics`
 
 ## URL parameters
 
+### Enable all
+
+`all=yes` enables all of the default filters at once
+
 ### Output
 
 `users=yes` enable:
