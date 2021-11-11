@@ -1,12 +1,23 @@
 <?php
-
 /**
  * Plugin Name: Prometheus Metrics in WordPress
  * Plugin URI: https://github.com/codeatcode/prometheus-metrics-for-wp/
- * Description: Add a custom json endpoint for Prometheus
- * Version: 2.0-b13
+ * Description: Add a custom endpoint for Prometheus
+ * Version: 2.0
+ * Requires at least: 5.6
  * Requires PHP: 7.3
+ * Text Domain: prometheus-metrics-for-wp
  */
+
+/**
+ * WordPress 5.6 is required for Health Check integration
+ * PHP 7.3 is required for hrtime() usage
+ */
+
+use WP_Prometheus_Metrics\Metric;
+
+// https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/
+define( 'PROMETHEUS_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 
 include "vendor/autoload.php";
 include "includes/class-site-health-extension.php";
@@ -16,11 +27,16 @@ add_action( 'rest_api_init', 'prometheus_register_route' );
 add_action( 'wp_ajax_prometheus_metrics_get_url', 'prometheus_get_url' );
 
 add_filter( 'prometheus-metrics-for-wp/is_access_allowed', 'prometheus_is_access_allowed', 10, 2 );
+
+// Trick to load all metrics first. Better idea?
+add_filter( 'prometheus_get_metrics', 'prometheus_load_metrics', 0 );
 /**
  * @deprecated
+ * @var boolean $measure_all True, if the "all" parameter is send
  */
-function prometheus_get_metrics() {
+function prometheus_get_metrics( bool $measure_all ): string {
 
+	include 'includes/_legacy.prometheus_custom_metrics.php';
 	/**
 	 * Filter database metrics result
 	 *
@@ -35,15 +51,20 @@ function prometheus_get_metrics() {
 	return $result;
 }
 
-function prometheus_get_url( $for_rest = true ) {
+/**
+ * @param bool $for_rest Prints the URL and "dies" if true, else returns the url
+ * @param bool $generate_if_requested Generates a new key if the POST parma generate_key is set
+ *
+ * @return string Url for the endpoint
+ */
+function prometheus_get_url( bool $for_rest = true, bool $generate_if_requested = true ): string {
 	if ( ! current_user_can( 'administrator' ) ) {
 		echo prometheus_empty_func();
 	}
 
-
 	$prometheusKey = defined( 'PROMETHEUS_KEY' ) ? PROMETHEUS_KEY : '';
 
-	if ( empty( $prometheusKey ) && filter_input( INPUT_GET, 'generate_key', FILTER_VALIDATE_BOOL ) ) {
+	if ( $generate_if_requested && filter_input( INPUT_POST, 'generate_key', FILTER_VALIDATE_BOOL ) ) {
 		$prometheusKey = wp_generate_uuid4();
 
 		$prometheusKeys                                                                          = get_option( 'prometheus-metrics-for-wp-keys', [] );
@@ -52,12 +73,9 @@ function prometheus_get_url( $for_rest = true ) {
 	}
 
 	$url = add_query_arg( [
-		'all'                  => 'yes',
-		'prometheus'           => $prometheusKey,
-		'label_hosting_vendor' => 'Unknown',
-		'label_hosting_rate'   => 'Unknown',
-	],
-		get_rest_url( null, '/metrics' ) );
+		'all'        => 'yes',
+		'prometheus' => $prometheusKey,
+	], get_rest_url( null, '/metrics' ) );
 
 	if ( $for_rest ) {
 		echo $url;
@@ -68,10 +86,10 @@ function prometheus_get_url( $for_rest = true ) {
 }
 
 /**
- * @param false $default bool
+ * @param $default bool
  * @param $request WP_REST_Request
  */
-function prometheus_is_access_allowed( $default, $request ) {
+function prometheus_is_access_allowed( bool $default, WP_REST_Request $request ): bool {
 	if ( $default ) {
 		return true;
 	}
@@ -89,7 +107,7 @@ function prometheus_is_access_allowed( $default, $request ) {
 	return false;
 }
 
-function prometheus_empty_func() {
+function prometheus_empty_func(): string {
 	return '{ "error": "You cannot access to that page" }';
 }
 
@@ -99,9 +117,9 @@ function prometheus_empty_func() {
  * @param $request WP_REST_Request
  * @param $server WP_REST_Server
  *
- * @return bool|mixed
+ * @return bool True, if the request was processed
  */
-function prometheus_serve_request( $served, $result, $request, $server ) {
+function prometheus_serve_request( bool $served, WP_HTTP_Response $result, WP_REST_Request $request, WP_REST_Server $server ): bool {
 	if ( $request->get_route() !== '/metrics' ) {
 		return $served;
 	}
@@ -111,12 +129,21 @@ function prometheus_serve_request( $served, $result, $request, $server ) {
 
 		return true;
 	}
-
-	header( 'Content-Type: text/plain; charset=' . get_option( 'blog_charset' ) );
-	$metrics = prometheus_get_metrics();
-	echo $metrics; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	$measure_all = filter_input( INPUT_GET, 'all', FILTER_SANITIZE_STRING ) === 'yes';
 
+	header( 'Content-Type: text/plain; charset=' . get_option( 'blog_charset' ) );
+	$legacy_metrics = prometheus_get_metrics( $measure_all );
+	echo $legacy_metrics; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	$metrics = apply_filters( 'prometheus_get_metrics', [] );
+	/** @var $metric Metric */
+	foreach ( $metrics as $metric ) {
+		$metric->print_metric( $measure_all );
+	}
+
+	return true;
+}
+
+function prometheus_load_metrics( $metrics = [] ) {
 	include_once "includes/class-abstract-metric.php";
 
 	include_once "includes/class-metric-database-size.php";
@@ -133,9 +160,7 @@ function prometheus_serve_request( $served, $result, $request, $server ) {
 	include_once "includes/class-metric-performance-count-posts.php";
 	include_once "includes/class-metric-performance-write-temp-file.php";
 
-	do_action( 'prometheus_print_metrics', $measure_all );
-
-	return true;
+	return $metrics;
 }
 
 function prometheus_register_route() {

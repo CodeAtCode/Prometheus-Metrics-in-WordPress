@@ -6,7 +6,7 @@ namespace WP_Prometheus_Metrics;
 class Pending_Updates_Metric extends Metric {
 
 	public function __construct() {
-		parent::__construct( 'wp_pending_updates', 'Pending updates in the WordPress website', 'gauge', 'pending_updates' );
+		parent::__construct( 'wp_pending_updates', 'gauge', 'pending_updates' );
 	}
 
 	function get_metric_value() {
@@ -16,6 +16,10 @@ class Pending_Updates_Metric extends Metric {
 		$translationUpdates = is_countable( $status->translations ) ? count( $status->translations ) : 0;
 
 		return $pluginUpdates + $translationUpdates;
+	}
+
+	function get_help_text() {
+		return _x( 'Pending updates in the WordPress website', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
 

@@ -5,7 +5,7 @@ namespace WP_Prometheus_Metrics;
 class Post_Types_Count_Metric extends Metric {
 
 	public function __construct() {
-		parent::__construct( 'wp_post_types_total', 'Total number of content by type and status' );
+		parent::__construct( 'wp_post_types_total' );
 	}
 
 	public function print_metric( $measure_all = false ) {
@@ -24,7 +24,7 @@ class Post_Types_Count_Metric extends Metric {
 
 		ob_start();
 
-		echo "# HELP $this->metric_name $this->help_text\n";
+		echo "# HELP $this->metric_name {$this->get_help_text()}\n";
 		echo "# TYPE $this->metric_name $this->type\n";
 
 		$post_types = array_merge( [
@@ -56,6 +56,10 @@ class Post_Types_Count_Metric extends Metric {
 
 	function get_metric_value() {
 		return ''; // Do nothing.
+	}
+
+	function get_help_text() {
+		return _x( 'Total number of content by type and status', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
 

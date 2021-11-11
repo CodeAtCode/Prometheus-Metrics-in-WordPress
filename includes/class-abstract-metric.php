@@ -4,21 +4,19 @@ namespace WP_Prometheus_Metrics;
 
 abstract class Metric {
 
-	protected $metric_name;
-	protected $help_text;
-	protected $type;
+	public $metric_name;
+	public $type;
 
-	private $legacy_get_param;
+	public $legacy_get_param;
 
 	/**
 	 * Metric constructor.
 	 *
 	 * @param $metric_name String Name of the metric
-	 * @param $help_text String The help text.
 	 * @param $type String The metrics type, defaults to "gauge"
 	 * @param $legacy_get_param String (Deprecated) The legacy GET parameter, which is checked. Use metric_name instead.
 	 */
-	public function __construct( $metric_name, $help_text, $type = 'gauge', $legacy_get_param = false ) {
+	public function __construct( string $metric_name, string $type = 'gauge', $legacy_get_param = false ) {
 		$this->metric_name = str_replace( '-', '_', $metric_name );
 
 		// For legacy reasons, this is still support. Just use the metric name instead
@@ -26,16 +24,23 @@ abstract class Metric {
 			$this->legacy_get_param = $legacy_get_param;
 		}
 
-		$this->help_text = $help_text;
-		$this->type      = $type;
-		add_action( 'prometheus_print_metrics', [ $this, 'print_metric' ], 10, 1 );
+		// @deprecated PROMETHEUS_LEGACY_TYPE -> will be removed in a future release
+		$this->type = defined( 'PROMETHEUS_LEGACY_TYPE' ) && PROMETHEUS_LEGACY_TYPE ? 'counter' : $type;
+
+		add_filter( 'prometheus_get_metrics', [ $this, 'get_metric' ], 10, 1 );
+	}
+
+	public function get_metric( $metrics = [] ) {
+		$metrics[] = $this;
+
+		return $metrics;
 	}
 
 	public function print_metric( $measure_all = false ) {
 		if ( ! $this->is_enabled( $measure_all ) ) {
 			return;
 		}
-		echo "# HELP $this->metric_name $this->help_text\n";
+		echo "# HELP $this->metric_name {$this->get_help_text()}\n";
 		echo "# TYPE $this->metric_name $this->type\n";
 		echo $this->metric_name . '{' . $this->get_metric_labels() . '} ' . $this->get_cached_metric_value() . "\n";
 	}
@@ -72,6 +77,11 @@ abstract class Metric {
 	}
 
 	abstract function get_metric_value();
+
+	/**
+	 * @return String Must be a function so i18n is supported
+	 */
+	abstract function get_help_text();
 
 	private function get_cached_metric_value() {
 		$transientKey = 'prometheus-metrics-for-wp/' . $this->metric_name;

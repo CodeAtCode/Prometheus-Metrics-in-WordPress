@@ -6,7 +6,7 @@ namespace WP_Prometheus_Metrics;
 class Performance_Write_Temp_File_Metric extends Metric {
 
 	public function __construct() {
-		parent::__construct( 'perf_write_temp_file', 'Measure the time in ns of writing a large file' );
+		parent::__construct( 'perf_write_temp_file', );
 	}
 
 	function get_metric_value() {
@@ -19,6 +19,10 @@ class Performance_Write_Temp_File_Metric extends Metric {
 		$end = hrtime( true );
 
 		return $end - $start;
+	}
+
+	function get_help_text() {
+		return _x( 'Measure the time in ns of writing a large file', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
 
