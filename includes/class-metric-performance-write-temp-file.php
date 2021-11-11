@@ -21,7 +21,7 @@ class Performance_Write_Temp_File_Metric extends Metric {
 		return $end - $start;
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Measure the time in ns of writing a large file', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

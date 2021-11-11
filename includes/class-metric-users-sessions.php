@@ -16,7 +16,7 @@ class Users_Sessions_Metric extends Metric {
 		return $wpdb->get_var( "SELECT count(*) FROM $wpdb->options WHERE `option_name` LIKE '_wp_session_%'" );
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'User sessions', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

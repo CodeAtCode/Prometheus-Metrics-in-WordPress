@@ -19,10 +19,8 @@ abstract class Metric {
 	public function __construct( string $metric_name, string $type = 'gauge', $legacy_get_param = false ) {
 		$this->metric_name = str_replace( '-', '_', $metric_name );
 
-		// For legacy reasons, this is still support. Just use the metric name instead
-		if ( $legacy_get_param ) {
-			$this->legacy_get_param = $legacy_get_param;
-		}
+		// For legacy reasons, this is still supported. Just use the metric name instead
+		$this->legacy_get_param = $legacy_get_param;
 
 		// @deprecated PROMETHEUS_LEGACY_TYPE -> will be removed in a future release
 		$this->type = defined( 'PROMETHEUS_LEGACY_TYPE' ) && PROMETHEUS_LEGACY_TYPE ? 'counter' : $type;
@@ -45,7 +43,7 @@ abstract class Metric {
 		echo $this->metric_name . '{' . $this->get_metric_labels() . '} ' . $this->get_cached_metric_value() . "\n";
 	}
 
-	public function get_metric_labels() {
+	public function get_metric_labels(): string {
 		$labels = [ 'host="' . get_site_url() . '"' ];
 		foreach ( $_GET as $label => $value ) {
 			if ( str_starts_with( $label, 'label_' ) ) {
@@ -67,7 +65,7 @@ abstract class Metric {
 			return true;
 		}
 
-		if ( filter_input( INPUT_GET, $this->legacy_get_param, FILTER_SANITIZE_STRING ) === 'yes' ) {
+		if ( $this->legacy_get_param && filter_input( INPUT_GET, $this->legacy_get_param, FILTER_SANITIZE_STRING ) === 'yes' ) {
 			_deprecated_argument( __FUNCTION__, '2.0', "Usage of legacy parameter $this->legacy_get_param is deprecated. Please use metric name instead: $this->metric_name" );
 
 			return true;
@@ -81,7 +79,7 @@ abstract class Metric {
 	/**
 	 * @return String Must be a function so i18n is supported
 	 */
-	abstract function get_help_text();
+	abstract function get_help_text(): string;
 
 	private function get_cached_metric_value() {
 		$transientKey = 'prometheus-metrics-for-wp/' . $this->metric_name;

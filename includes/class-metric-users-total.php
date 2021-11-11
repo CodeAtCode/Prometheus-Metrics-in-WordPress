@@ -13,7 +13,7 @@ class Users_Count_Metric extends Metric {
 		return count_users()['total_users'];
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Total number of users', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

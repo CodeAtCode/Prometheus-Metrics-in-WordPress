@@ -18,7 +18,7 @@ class Pending_Updates_Metric extends Metric {
 		return $pluginUpdates + $translationUpdates;
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Pending updates in the WordPress website', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

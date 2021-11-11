@@ -59,15 +59,17 @@ See the included page at `Tools` -> `Site Health` -> `Prometheus` with specific 
 
 * **Major rewrite, which may break your current metrics!**
 * Requires at least WordPress 5.6 and PHP 7.3
+    * Added PHP 8.0 polyfill
 * Use 'gauge' instead of 'counter'
     * Define `PROMETHEUS_LEGACY_TYPE` with true to change this
 * Added more metrics
     * You can add custom metrics by implementing WP_Prometheus_Metrics\Metric
-* Seperated metrics for posts into post types
+* Added timestamps to metrics
+* Metrics will be cached for 1h by default (use filter `prometheus-metrics-for-wp/timeout` to change this)
+* Seperated metrics for different post types
 * Site health check integration
-    * View url
+    * View url for endpoint
     * Ability to generate authentication keys
-* Added PHP 8.0 polyfill
 
 **Legacy support**
 

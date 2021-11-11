@@ -16,7 +16,7 @@ class Database_Size_Metric extends Metric {
 		return $size;
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Total DB size in MB', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

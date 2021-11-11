@@ -18,7 +18,7 @@ class Performance_Count_Posts_Metric extends Metric {
 		return $end - $start;
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Measure the time in ns for a count query on the posts table', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

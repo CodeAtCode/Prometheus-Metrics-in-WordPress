@@ -58,7 +58,7 @@ class Post_Types_Count_Metric extends Metric {
 		return ''; // Do nothing.
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Total number of content by type and status', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }

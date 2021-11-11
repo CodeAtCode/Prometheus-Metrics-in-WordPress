@@ -15,7 +15,7 @@ class Options_Autoloaded_Size_Metric extends Metric {
 		return $wpdb->get_var( "SELECT ROUND(SUM(LENGTH(option_value))/ 1024) FROM $wpdb->options WHERE `autoload` = 'yes'" ); // phpcs:ignore WordPress.DB
 	}
 
-	function get_help_text() {
+	function get_help_text(): string {
 		return _x( 'Options in autoload', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
