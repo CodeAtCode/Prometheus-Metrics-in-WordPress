@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Users_Sessions_Metric extends Metric {
+class Users_Sessions_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_user_sessions', 'gauge', 'user_sessions' );
@@ -20,5 +20,3 @@ class Users_Sessions_Metric extends Metric {
 		return _x( 'User sessions', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Users_Sessions_Metric();

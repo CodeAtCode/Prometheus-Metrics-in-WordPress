@@ -1,8 +1,8 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
-abstract class Metric {
+abstract class Abstract_Metric {
 
 	public $metric_name;
 	public $type;

@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Database_Size_Metric extends Metric {
+class Database_Size_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_db_size', 'gauge', 'db_size' );
@@ -20,5 +20,3 @@ class Database_Size_Metric extends Metric {
 		return _x( 'Total DB size in MB', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Database_Size_Metric();

@@ -140,7 +140,7 @@ any_example{host="https://...",hosting_vendor="MyExampleHoster",hosting_rate="Fa
                     </thead>
 					<?php
 					$metrics = apply_filters( 'prometheus_get_metrics', [] );
-					/** @var $metric Metric */
+					/** @var $metric AbstractMetric */
 					foreach ( $metrics as $metric ) {
 						?>
                         <tr>
@@ -161,5 +161,3 @@ any_example{host="https://...",hosting_vendor="MyExampleHoster",hosting_rate="Fa
 	}
 
 }
-
-new Site_Health_Extension();

@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Options_Autoloaded_Size_Metric extends Metric {
+class Options_Autoloaded_Size_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_options_autoload_size', 'gauge', 'autoload' );
@@ -19,5 +19,3 @@ class Options_Autoloaded_Size_Metric extends Metric {
 		return _x( 'Options in autoload', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Options_Autoloaded_Size_Metric();

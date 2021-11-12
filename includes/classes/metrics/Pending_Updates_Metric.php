@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Pending_Updates_Metric extends Metric {
+class Pending_Updates_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_pending_updates', 'gauge', 'pending_updates' );
@@ -22,5 +22,3 @@ class Pending_Updates_Metric extends Metric {
 		return _x( 'Pending updates in the WordPress website', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Pending_Updates_Metric();

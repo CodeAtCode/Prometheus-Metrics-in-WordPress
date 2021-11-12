@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Transients_Autoloaded_Count_Metric extends Metric {
+class Transients_Autoloaded_Count_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_transient_autoload', 'gauge', 'transient' );
@@ -19,5 +19,3 @@ class Transients_Autoloaded_Count_Metric extends Metric {
 		return _x( 'DB Transient in autoload.', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Transients_Autoloaded_Count_Metric();

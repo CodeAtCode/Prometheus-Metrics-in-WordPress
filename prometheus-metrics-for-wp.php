@@ -14,13 +14,16 @@
  * PHP 7.3 is required for hrtime() usage
  */
 
-use WP_Prometheus_Metrics\Metric;
-
 // https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/
+use WP_Prometheus_Metrics\Default_Metrics_Loader;
+use WP_Prometheus_Metrics\Site_Health_Extension;
+
 define( 'PROMETHEUS_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 
 include "vendor/autoload.php";
-include "includes/class-site-health-extension.php";
+
+new Site_Health_Extension();
+new Default_Metrics_Loader();
 
 add_filter( 'rest_pre_serve_request', 'prometheus_serve_request', 10, 4 );
 add_action( 'rest_api_init', 'prometheus_register_route' );
@@ -28,8 +31,7 @@ add_action( 'wp_ajax_prometheus_metrics_get_url', 'prometheus_get_url' );
 
 add_filter( 'prometheus-metrics-for-wp/is_access_allowed', 'prometheus_is_access_allowed', 10, 2 );
 
-// Trick to load all metrics first. Better idea?
-add_filter( 'prometheus_get_metrics', 'prometheus_load_metrics', 0 );
+
 /**
  * @deprecated
  * @var boolean $measure_all True, if the "all" parameter is send
@@ -135,32 +137,12 @@ function prometheus_serve_request( bool $served, WP_HTTP_Response $result, WP_RE
 	$legacy_metrics = prometheus_get_metrics( $measure_all );
 	echo $legacy_metrics; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	$metrics = apply_filters( 'prometheus_get_metrics', [] );
-	/** @var $metric Metric */
+	/** @var $metric Abstract_Metric */
 	foreach ( $metrics as $metric ) {
 		$metric->print_metric( $measure_all );
 	}
 
 	return true;
-}
-
-function prometheus_load_metrics( $metrics = [] ) {
-	include_once "includes/class-abstract-metric.php";
-
-	include_once "includes/class-metric-database-size.php";
-	include_once "includes/class-metric-users-total.php";
-	include_once "includes/class-metric-users-sessions.php";
-	include_once "includes/class-metric-options-autoloaded-count.php";
-	include_once "includes/class-metric-options-autoloaded-size.php";
-	include_once "includes/class-metric-posts-without-content.php";
-	include_once "includes/class-metric-posts-without-title.php";
-	include_once "includes/class-metric-post-types-count.php";
-	include_once "includes/class-metric-pending-updates.php";
-	include_once "includes/class-metric-transients-autoloaded-count.php";
-
-	include_once "includes/class-metric-performance-count-posts.php";
-	include_once "includes/class-metric-performance-write-temp-file.php";
-
-	return $metrics;
 }
 
 function prometheus_register_route() {

@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Performance_Count_Posts_Metric extends Metric {
+class Performance_Count_Posts_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'perf_count_posts', );
@@ -22,5 +22,3 @@ class Performance_Count_Posts_Metric extends Metric {
 		return _x( 'Measure the time in ns for a count query on the posts table', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Performance_Count_Posts_Metric();

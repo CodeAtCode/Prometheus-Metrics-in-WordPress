@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Performance_Write_Temp_File_Metric extends Metric {
+class Performance_Write_Temp_File_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'perf_write_temp_file', );
@@ -25,6 +25,4 @@ class Performance_Write_Temp_File_Metric extends Metric {
 		return _x( 'Measure the time in ns of writing a large file', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Performance_Write_Temp_File_Metric();
 

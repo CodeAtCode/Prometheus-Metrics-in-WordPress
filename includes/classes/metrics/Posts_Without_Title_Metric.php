@@ -1,9 +1,8 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
-
-class Posts_Without_Title_Metric extends Metric {
+class Posts_Without_Title_Metric extends Abstract_Metric {
 
 
 	public function __construct() {
@@ -21,4 +20,3 @@ class Posts_Without_Title_Metric extends Metric {
 	}
 }
 
-new Posts_Without_Title_Metric();

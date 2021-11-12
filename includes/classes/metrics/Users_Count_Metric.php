@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Users_Count_Metric extends Metric {
+class Users_Count_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_users_total', 'gauge', 'users' );
@@ -17,5 +17,3 @@ class Users_Count_Metric extends Metric {
 		return _x( 'Total number of users', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Users_Count_Metric();

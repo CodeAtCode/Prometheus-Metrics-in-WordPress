@@ -1,8 +1,8 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
-class Post_Types_Count_Metric extends Metric {
+class Post_Types_Count_Metric extends Abstract_Metric {
 
 	public function __construct() {
 		parent::__construct( 'wp_post_types_total' );
@@ -62,5 +62,3 @@ class Post_Types_Count_Metric extends Metric {
 		return _x( 'Total number of content by type and status', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Post_Types_Count_Metric();

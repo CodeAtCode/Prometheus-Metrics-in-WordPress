@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Prometheus_Metrics;
+namespace WP_Prometheus_Metrics\metrics;
 
 
-class Posts_Without_Content_Metric extends Metric {
+class Posts_Without_Content_Metric extends Abstract_Metric {
 
 
 	public function __construct() {
@@ -20,5 +20,3 @@ class Posts_Without_Content_Metric extends Metric {
 		return _x( 'Posts and Pages without content', 'Metric Help Text', 'prometheus-metrics-for-wp' );
 	}
 }
-
-new Posts_Without_Content_Metric();

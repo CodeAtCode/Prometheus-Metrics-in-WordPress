@@ -11,6 +11,10 @@ class ComposerStaticInitdf8b4a0a50b1b2ddfe61ae1293f8c57b
     );
 
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'WP_Prometheus_Metrics\\' => 22,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -18,6 +22,10 @@ class ComposerStaticInitdf8b4a0a50b1b2ddfe61ae1293f8c57b
     );
 
     public static $prefixDirsPsr4 = array (
+        'WP_Prometheus_Metrics\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/includes/classes',
+        ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
