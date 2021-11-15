@@ -16,6 +16,7 @@
 
 // https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/
 use WP_Prometheus_Metrics\Default_Metrics_Loader;
+use WP_Prometheus_Metrics\metrics\Abstract_Metric;
 use WP_Prometheus_Metrics\Site_Health_Extension;
 
 define( 'PROMETHEUS_PLUGIN_FILE', plugin_basename( __FILE__ ) );
@@ -30,7 +31,6 @@ add_action( 'rest_api_init', 'prometheus_register_route' );
 add_action( 'wp_ajax_prometheus_metrics_get_url', 'prometheus_get_url' );
 
 add_filter( 'prometheus-metrics-for-wp/is_access_allowed', 'prometheus_is_access_allowed', 10, 2 );
-
 
 /**
  * @deprecated

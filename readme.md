@@ -8,6 +8,11 @@ Grafana dashboard avalaible on [official website](https://grafana.com/grafana/da
 
 ![](https://grafana.com/api/dashboards/11178/images/7117/image)
 
+## Build project
+
+* You need [Composer](https://getcomposer.org)
+* Run `composer update -o`
+
 ## Settings
 
 In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
