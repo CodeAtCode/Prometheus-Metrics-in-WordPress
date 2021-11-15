@@ -1,5 +1,6 @@
 # Prometheus Metrics in WordPress
-[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)   
+
+[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 A WordPress plugin, based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
 
@@ -7,7 +8,12 @@ Grafana dashboard avalaible on [official website](https://grafana.com/grafana/da
 
 ![](https://grafana.com/api/dashboards/11178/images/7117/image)
 
-## Settings  
+## Build project
+
+* You need [Composer](https://getcomposer.org)
+* Run `composer update -o`
+
+## Settings
 
 In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
 
@@ -16,6 +22,7 @@ In wp-config.php you need to settings that constant that will be used to expose 
 ## Prometheus
 
 To add a new target:
+
 ```
   - job_name: "WordPress metrics"
     static_configs:
@@ -39,7 +46,7 @@ To add a new target:
 
 ### WordPress customization
 
-This plugin include an hook to append new metrics: `prometheus_custom_metrics`
+This plugin includes a hook to append new metrics: `prometheus_custom_metrics`
 
 ## URL parameters
 
@@ -47,79 +54,32 @@ This plugin include an hook to append new metrics: `prometheus_custom_metrics`
 
 `all=yes` enables all of the default filters at once
 
-### Output
+### Enable or disable specific metrics
 
-`users=yes` enable:
-```
-# HELP wp_users_total Total number of users.
-# TYPE wp_users_total counter
-wp_users_total{host="https://domain.tld"} 117
-```
+See the included page at `Tools` -> `Site Health` -> `Prometheus` with specific metric parameters.
 
-`posts=yes` enable:
-```
-# HELP wp_posts_total Total number of posts published.
-# TYPE wp_posts_total counter
-wp_posts_total{host="https://domain.tld", status="published"} 11786
-wp_posts_total{host="https://domain.tld", status="draft"} 134
-```
+## Changelog
 
-`pages=yes` enable:
-```
-# HELP wp_pages_total Total number of posts published.
-# TYPE wp_pages_total counter
-wp_pages_total{host="https://domain.tld", status="published"} 56
-wp_pages_total{host="https://domain.tld", status="draft"} 4
-```
+### 2.0 ###
 
-`autoload=yes` enable:
-```
-# HELP wp_options_autoload Options in autoload.
-# TYPE wp_options_autoload counter
-wp_options_autoload{host="https://domain.tld"} 4194
-# HELP wp_options_autoload_size Options size in KB in autoload.
-# TYPE wp_options_autoload_size counter
-wp_options_autoload_size{host="https://domain.tld"} 186
-```
+* **Major rewrite, which may break your current metrics!**
+* Requires at least WordPress 5.6 and PHP 7.3
+    * Added PHP 8.0 polyfill
+* Use 'gauge' instead of 'counter'
+    * Define `PROMETHEUS_LEGACY_TYPE` with true to change this
+* Added more metrics
+    * You can add custom metrics by implementing WP_Prometheus_Metrics\Metric
+* Added timestamps to metrics
+* Metrics will be cached for 1h by default (use filter `prometheus-metrics-for-wp/timeout` to change this)
+* Seperated metrics for different post types
+* Site health check integration
+    * View url for endpoint
+    * Ability to generate authentication keys
 
-`transient=yes` enable:
-```
-# HELP wp_transient_autoload DB Transient in autoload.
-# TYPE wp_transient_autoload counter
-wp_transient_autoload{host="https://domain.tld"} 3681
-```
+**Legacy support**
 
-`user_sessions=yes` enable:
-```
-# HELP wp_user_sessions User sessions.
-# TYPE wp_user_sessions counter
-wp_user_sessions{host="https://domain.tld"} 0
-```
+To use 'counter' instead of 'gauge', add the following to your `wp-config.php`
 
-`posts_without_title=yes` enable:
-```
-# HELP wp_posts_without_title Post/Page without title.
-# TYPE wp_posts_without_title counter
-wp_posts_without_title{host="https://domain.tld"} 0
-```
-
-`posts_without_content=yes` enable:
-```
-# HELP wp_posts_without_content Post/Page without content.
-# TYPE wp_posts_without_content counter
-wp_posts_without_content{host="https://domain.tld"} 15
-```
-
-`db_size=yes` enable:
-```
-# HELP wp_db_size Total DB size in MB.
-# TYPE wp_db_size counter
-wp_db_size{host="https://domain.tld"} 580.35
-```
-
-`pending_updates=yes` enable:
-```
-# HELP wp_pending_updates Pending updates in the WordPress website.
-# TYPE wp_pending_updates counter
-wp_pending_updates{host="https://domain.tld"} 1
+```php
+define('PROMETHEUS_LEGACY_TYPE', true);
 ```

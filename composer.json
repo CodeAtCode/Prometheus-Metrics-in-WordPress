@@ -1,0 +1,10 @@
+{
+  "require": {
+    "symfony/polyfill-php80": "^v1.23.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "WP_Prometheus_Metrics\\": "includes/classes"
+    }
+  }
+}
