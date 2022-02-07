@@ -60,6 +60,12 @@ See the included page at `Tools` -> `Site Health` -> `Prometheus` with specific 
 
 ## Changelog
 
+### 2.1 ###
+
+* 
+* Disabled legacy metrics by default (to avoid warnings in the logs)
+  * Enable it, by adding `define('PROMETHEUS_INCLUDE_LEGACY_METRICS', true);` to `wp-config.php`  
+
 ### 2.0 ###
 
 * **Major rewrite, which may break your current metrics!**

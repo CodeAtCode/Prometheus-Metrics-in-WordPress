@@ -38,7 +38,10 @@ add_filter( 'prometheus-metrics-for-wp/is_access_allowed', 'prometheus_is_access
  */
 function prometheus_get_metrics( bool $measure_all ): string {
 
-	include 'includes/_legacy.prometheus_custom_metrics.php';
+    if(defined('PROMETHEUS_INCLUDE_LEGACY_METRICS') && PROMETHEUS_INCLUDE_LEGACY_METRICS) {
+        include 'includes/_legacy.prometheus_custom_metrics.php';
+    }
+
 	/**
 	 * Filter database metrics result
 	 *
