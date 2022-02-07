@@ -7,6 +7,7 @@ use WP_Prometheus_Metrics\metrics\Options_Autoloaded_Count_Metric;
 use WP_Prometheus_Metrics\metrics\Options_Autoloaded_Size_Metric;
 use WP_Prometheus_Metrics\metrics\Pending_Updates_Metric;
 use WP_Prometheus_Metrics\metrics\Performance_Count_Posts_Metric;
+use WP_Prometheus_Metrics\metrics\Performance_Write_File_To_WP_Upload_Dir_Metric;
 use WP_Prometheus_Metrics\metrics\Performance_Write_Temp_File_Metric;
 use WP_Prometheus_Metrics\metrics\Post_Types_Count_Metric;
 use WP_Prometheus_Metrics\metrics\Posts_Without_Content_Metric;
@@ -38,7 +39,8 @@ class Default_Metrics_Loader {
 			new Transients_Autoloaded_Count_Metric();
 			new Performance_Count_Posts_Metric();
 			new Performance_Write_Temp_File_Metric();
-			
+			new Performance_Write_File_To_WP_Upload_Dir_Metric();
+
 			$this->metrics_loaded = true;
 		}
 
