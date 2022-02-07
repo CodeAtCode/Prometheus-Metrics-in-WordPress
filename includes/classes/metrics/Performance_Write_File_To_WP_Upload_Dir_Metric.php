@@ -13,10 +13,10 @@ class Performance_Write_File_To_WP_Upload_Dir_Metric extends Abstract_Metric
 
     function get_metric_value()
     {
-        $file = trailingslashit(wp_upload_dir()['path']) . 'prometheus-temp-' . wp_generate_uuid4();
+        $file = trailingslashit(wp_upload_dir()['basedir']) . 'prometheus-temp-' . wp_generate_uuid4();
 
         $start = hrtime(true);
-        $temp = file($file);
+        $temp = fopen($file, 'w');
         for ($i = 0; $i < 1024 * 1024; $i++) {
             fwrite($temp, 'a');
         }
