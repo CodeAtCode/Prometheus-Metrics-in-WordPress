@@ -3,7 +3,7 @@
  * Plugin Name: Prometheus Metrics in WordPress
  * Plugin URI: https://github.com/codeatcode/prometheus-metrics-for-wp/
  * Description: Add a custom endpoint for Prometheus
- * Version: 2.0
+ * Version: 2.1
  * Requires at least: 5.6
  * Requires PHP: 7.3
  * Text Domain: prometheus-metrics-for-wp
