@@ -62,7 +62,8 @@ See the included page at `Tools` -> `Site Health` -> `Prometheus` with specific 
 
 ### 2.1 ###
 
-* 
+* Seperated host and schema (and port) 
+* Added metric for writing temporary file into uploads folder
 * Disabled legacy metrics by default (to avoid warnings in the logs)
   * Enable it, by adding `define('PROMETHEUS_INCLUDE_LEGACY_METRICS', true);` to `wp-config.php`  
 

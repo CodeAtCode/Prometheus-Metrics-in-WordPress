@@ -142,7 +142,7 @@ function prometheus_serve_request( bool $served, WP_HTTP_Response $result, WP_RE
 	$metrics = apply_filters( 'prometheus_get_metrics', [] );
 	/** @var $metric Abstract_Metric */
 	foreach ( $metrics as $metric ) {
-		$metric->print_metric( $measure_all );
+        $metric->print_metric( $measure_all );
 	}
 
 	return true;
