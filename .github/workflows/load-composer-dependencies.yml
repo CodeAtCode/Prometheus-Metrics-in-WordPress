@@ -1,0 +1,29 @@
+name: "Load composer dependencies and push to dist branch"
+
+on:
+  push:
+   branches: ["main"]
+
+jobs:
+  build:
+    name: Load composer dependencies and push to dist branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          submodules: false
+      - name: "Install dependencies"
+        uses: docker://composer:2.2.6
+        run: composer install -o
+      - name: "Push to dist branch"
+        run: |
+          echo "" > .gitignore # Reset gitignore
+          git checkout -B dist
+          git add vendor
+          git commit -m "ci: vendor installed"
+          git push --force origin dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      
