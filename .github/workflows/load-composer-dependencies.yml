@@ -21,6 +21,8 @@ jobs:
 
       - name: "Push to dist branch"
         run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
           echo "" > .gitignore # Reset gitignore
           git checkout -B dist
           git add vendor
