@@ -14,8 +14,11 @@ jobs:
         with:
           submodules: false
       - name: "Install dependencies"
+        
         uses: docker://composer:2.2.6
-        run: composer install -o
+        with:
+          args: composer install -o
+
       - name: "Push to dist branch"
         run: |
           echo "" > .gitignore # Reset gitignore
