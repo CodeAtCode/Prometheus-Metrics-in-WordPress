@@ -2,7 +2,7 @@ name: "Load composer dependencies and push to dist branch"
 
 on:
   push:
-   branches: ["main"]
+   branches: ["master"]
 
 jobs:
   build:
