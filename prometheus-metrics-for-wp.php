@@ -152,6 +152,7 @@ function prometheus_register_route() {
 		array(
 			'methods'  => 'GET',
 			'callback' => 'prometheus_empty_func',
+			'permission_callback' => '__return_true',
 		)
 	);
 }
