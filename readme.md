@@ -15,9 +15,7 @@ Grafana dashboard avalaible on [official website](https://grafana.com/grafana/da
 
 ## Settings
 
-In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
-
-`define( 'PROMETHEUS_KEY', 'fg98dfgkj' );`
+The plugin has a settings panel where you can configure what you need include the key.
 
 ## Prometheus
 
