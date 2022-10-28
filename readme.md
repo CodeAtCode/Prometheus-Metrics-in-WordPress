@@ -60,12 +60,18 @@ See the included page at `Tools` -> `Site Health` -> `Prometheus` with specific 
 
 ## Changelog
 
+### 3.0.x ###
+
+* Use Prometheus Client PHP lib to make sure, the format is correct (https://github.com/promphp/prometheus_client_php)
+* Removed "legacy" metrics
+* Fixed warnings
+
 ### 2.1 ###
 
-* Seperated host and schema (and port) 
+* Seperated host and schema (and port)
 * Added metric for writing temporary file into uploads folder
 * Disabled legacy metrics by default (to avoid warnings in the logs)
-  * Enable it, by adding `define('PROMETHEUS_INCLUDE_LEGACY_METRICS', true);` to `wp-config.php`  
+    * Enable it, by adding `define('PROMETHEUS_INCLUDE_LEGACY_METRICS', true);` to `wp-config.php`
 
 ### 2.0 ###
 
