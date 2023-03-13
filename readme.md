@@ -4,7 +4,7 @@
 
 A WordPress plugin, based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
 
-Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178).
+Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178), the `wp_info` data JSON for Grafana it's available [here](https://github.com/CodeAtCode/Prometheus-Metrics-in-WordPress/pull/16#issuecomment-1464940620).
 
 ![](https://grafana.com/api/dashboards/11178/images/7117/image)
 
