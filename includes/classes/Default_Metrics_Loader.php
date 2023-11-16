@@ -34,6 +34,9 @@ class Default_Metrics_Loader
     function load_default_metrics($metrics = [])
     {
         if (!$this->metrics_loaded) {
+
+            require_once ABSPATH . 'wp-admin/includes/update.php';
+
             new Sizes_Information_Metric();
             new Info_Metric();
             new Options_Autoloaded_Count_Metric();
