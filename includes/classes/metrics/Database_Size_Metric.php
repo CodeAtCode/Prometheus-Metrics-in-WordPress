@@ -2,10 +2,11 @@
 
 namespace WP_Prometheus_Metrics\metrics;
 
-
+/**
+ * @deprecated Use debug_data_sizes instead
+ */
 class Database_Size_Metric extends Abstract_Gauge_Metric
 {
-
     public function __construct()
     {
         parent::__construct('db_size');
@@ -13,7 +14,7 @@ class Database_Size_Metric extends Abstract_Gauge_Metric
 
     function get_help_text(): string
     {
-        return _x('Total DB size in MB', 'Metric Help Text', 'prometheus-metrics-for-wp');
+        return _x('(Deprecated) Use debug_data_sizes instead', 'Metric Help Text', 'prometheus-metrics-for-wp');
     }
 
     function get_metric_value()
