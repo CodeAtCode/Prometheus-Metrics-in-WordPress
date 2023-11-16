@@ -3,6 +3,7 @@
 namespace WP_Prometheus_Metrics;
 
 use WP_Prometheus_Metrics\metrics\Database_Size_Metric;
+use WP_Prometheus_Metrics\metrics\Info_Metric;
 use WP_Prometheus_Metrics\metrics\Options_Autoloaded_Count_Metric;
 use WP_Prometheus_Metrics\metrics\Options_Autoloaded_Size_Metric;
 use WP_Prometheus_Metrics\metrics\Pending_Updates_Metric;
@@ -29,6 +30,7 @@ class Default_Metrics_Loader
     {
         if (!$this->metrics_loaded) {
             new Database_Size_Metric();
+            new Info_Metric();
             new Options_Autoloaded_Count_Metric();
             new Options_Autoloaded_Size_Metric();
             new Pending_Updates_Metric();

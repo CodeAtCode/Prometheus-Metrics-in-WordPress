@@ -4,7 +4,7 @@
 
 A WordPress plugin, based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
 
-Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178).
+Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178), the `wp_info` data JSON for Grafana it's available [here](https://github.com/CodeAtCode/Prometheus-Metrics-in-WordPress/pull/16#issuecomment-1464940620).
 
 ![](https://grafana.com/api/dashboards/11178/images/7117/image)
 
@@ -15,9 +15,7 @@ Grafana dashboard avalaible on [official website](https://grafana.com/grafana/da
 
 ## Settings
 
-In wp-config.php you need to settings that constant that will be used to expose those metrics in the url.
-
-`define( 'PROMETHEUS_KEY', 'fg98dfgkj' );`
+The plugin has a settings panel where you can configure what you need include the key.
 
 ## Prometheus
 
