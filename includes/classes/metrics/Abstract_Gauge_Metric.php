@@ -13,7 +13,7 @@ abstract class Abstract_Gauge_Metric extends Abstract_Metric
 
     abstract function get_metric_value();
 
-    function internal_add_metric($registry)
+    function internal_add_metric($registry): void
     {
         $labels = $this->get_metric_labels();
         $gauge = $registry->getOrRegisterGauge($this->namespace, $this->metric_name, $this->get_help_text(), array_keys($labels));

@@ -2,7 +2,9 @@
 
 namespace WP_Prometheus_Metrics\metrics;
 
-
+/**
+ * @deprecated Pending updates are seperated metrics now
+ */
 class Pending_Updates_Metric extends Abstract_Gauge_Metric
 {
 
@@ -23,6 +25,6 @@ class Pending_Updates_Metric extends Abstract_Gauge_Metric
 
     function get_help_text(): string
     {
-        return _x('Pending updates in the WordPress website', 'Metric Help Text', 'prometheus-metrics-for-wp');
+        return _x('(Deprecated) Pending updates in the WordPress website', 'Metric Help Text', 'prometheus-metrics-for-wp');
     }
 }

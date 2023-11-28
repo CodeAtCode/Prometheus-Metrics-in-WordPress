@@ -2,7 +2,6 @@
 
 namespace WP_Prometheus_Metrics\metrics;
 
-
 class Options_Autoloaded_Size_Metric extends Abstract_Gauge_Metric
 {
 

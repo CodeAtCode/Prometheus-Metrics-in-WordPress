@@ -4,7 +4,8 @@
 
 A WordPress plugin, based on [https://github.com/CodeAtCode/WPDB-Status](https://github.com/CodeAtCode/WPDB-Status).
 
-Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178), the `wp_info` data JSON for Grafana it's available [here](https://github.com/CodeAtCode/Prometheus-Metrics-in-WordPress/pull/16#issuecomment-1464940620).
+Grafana dashboard avalaible on [official website](https://grafana.com/grafana/dashboards/11178), the `wp_info` data JSON for Grafana it's
+available [here](https://github.com/CodeAtCode/Prometheus-Metrics-in-WordPress/pull/16#issuecomment-1464940620).
 
 ![](https://grafana.com/api/dashboards/11178/images/7117/image)
 
@@ -57,6 +58,14 @@ This plugin includes a hook to append new metrics: `prometheus_custom_metrics`
 See the included page at `Tools` -> `Site Health` -> `Prometheus` with specific metric parameters.
 
 ## Changelog
+
+### 3.1.x ###
+
+* Metrics
+    * Added / Improved metrics for more technical insights (DB, PHP, WordPress)
+* Site Health Check
+    * Added section with InfluxDB Task example
+* Some cleanup
 
 ### 3.0.x ###
 

@@ -3,7 +3,7 @@
  * Plugin Name: Prometheus Metrics in WordPress
  * Plugin URI: https://github.com/codeatcode/prometheus-metrics-for-wp/
  * Description: Add a custom endpoint for Prometheus
- * Version: 3.0.1
+ * Version: 3.1.0
  * Requires at least: 5.6
  * Requires PHP: 7.3
  * Text Domain: prometheus-metrics-for-wp
@@ -22,6 +22,7 @@ use WP_Prometheus_Metrics\Default_Metrics_Loader;
 use WP_Prometheus_Metrics\Site_Health_Extension;
 
 define('PROMETHEUS_PLUGIN_FILE', plugin_basename(__FILE__));
+define('PROMETHEUS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
 include "vendor/autoload.php";
 
@@ -126,7 +127,7 @@ function prometheus_serve_request(bool $served, WP_HTTP_Response $result, WP_RES
     }
 
     /** @var CollectorRegistry $registry */
-    $registry = apply_filters('prometheus-metrics-for-wp/get_registry', new CollectorRegistry(new InMemory()));
+    $registry = apply_filters('prometheus-metrics-for-wp/get_registry', new CollectorRegistry(new InMemory(), false));
 
     $metrics = apply_filters('prometheus-metrics-for-wp/get_metrics', []);
     foreach ($metrics as $metric) {
